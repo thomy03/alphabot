@@ -1,0 +1,274 @@
+# AlphaBot - Politique de Gestion des Risques
+# Version: 1.0
+# Date: 2025-01-13
+
+# ===========================================
+# PARAMETRES GLOBAUX DE RISQUE
+# ===========================================
+
+risk_global:
+  # Drawdown maximum acceptable (%)
+  max_drawdown_percent: 15.0
+  
+  # Temps maximum pour récupérer d'un DD (mois)
+  max_drawdown_recovery_months: 3
+  
+  # Capital total disponible (€)
+  total_capital_eur: 10000
+  
+  # Exposition maximale du portefeuille (% du capital)
+  max_portfolio_exposure_percent: 95.0
+  
+  # VaR quotidien maximum (% du capital) 
+  max_daily_var_percent: 3.0
+  
+  # Expected Shortfall maximum (% du capital)
+  max_expected_shortfall_percent: 5.0
+  
+  # Seuil max de regret pour optimisation RL (%)
+  regret_minimization_threshold: 5.0
+
+# ===========================================
+# LIMITES DE POSITION
+# ===========================================
+
+position_limits:
+  # Position maximale par titre (% du portefeuille)
+  max_single_stock_percent: 5.0
+  
+  # Position sizing dynamique par conviction
+  dynamic_sizing: true
+  conviction_based_allocation:
+    low: 1.0   # % min pour conviction <50%
+    high: 5.0  # % max pour conviction >80%
+  
+  # Position maximale par secteur GICS (% du portefeuille)
+  max_sector_exposure_percent: 30.0
+  
+  # Répartition géographique maximale
+  geographic_limits:
+    us_max_percent: 70.0
+    europe_max_percent: 20.0  
+    asia_max_percent: 10.0
+  
+  # Capital minimum par trade (€)
+  min_trade_amount_eur: 100
+  
+  # Capital maximum par trade (€)
+  max_trade_amount_eur: 500
+  
+  # Leverage maximum (si extension futures/options)
+  max_leverage: 2.0
+
+# ===========================================
+# GESTION DES STOPS ET SORTIES
+# ===========================================
+
+stop_management:
+  # Stop loss basé sur ATR (multiple)
+  atr_stop_multiplier: 2.0
+  
+  # Stop loss adaptatif par volatilité
+  adaptive_stop_multiplier:
+    low_vol: 2.5   # Si volatilité <20%
+    high_vol: 1.5  # Si volatilité >30%
+  
+  # Période ATR (jours)
+  atr_period_days: 14
+  
+  # Stop loss maximum (% de la position)
+  max_stop_loss_percent: 8.0
+  
+  # Take profit automatique (% de la position) 
+  auto_take_profit_percent: 15.0
+  
+  # Trailing stop (% de la position)
+  trailing_stop_percent: 5.0
+  
+  # Seuil break-even pour activer trailing (%)
+  breakeven_threshold_percent: 5.0
+
+# ===========================================
+# SECTEURS ET EXCLUSIONS
+# ===========================================
+
+sector_policy:
+  # Secteurs autorisés (codes GICS)
+  allowed_sectors:
+    - "Information Technology"
+    - "Health Care" 
+    - "Financials"
+    - "Consumer Discretionary"
+    - "Communication Services"
+    - "Industrials"
+    - "Consumer Staples"
+    - "Energy"
+    - "Utilities"
+    - "Real Estate"
+    - "Materials"
+  
+  # Secteurs exclus (préférences personnelles)
+  excluded_sectors: []
+  
+  # Titres spécifiquement exclus
+  excluded_tickers:
+    - "TSLA"  # Exemple: trop volatil pour profil conservateur
+  
+  # Secteurs à exposition réduite (% max)
+  reduced_exposure_sectors:
+    "Energy": 15.0
+    "Real Estate": 10.0
+  
+  # Ajustement dynamique secteurs via RL/regret
+  dynamic_sector_adjustment: true
+
+# ===========================================
+# GESTION DE LA VOLATILITE
+# ===========================================
+
+volatility_management:
+  # Volatilité maximale acceptée pour un titre (annualisée)
+  max_stock_volatility_percent: 50.0
+  
+  # Corrélation maximum moyenne du portefeuille
+  max_portfolio_correlation: 0.7
+  
+  # Seuil de rebalancing (drift en %)
+  rebalancing_threshold_percent: 20.0
+  
+  # Fréquence de rebalancing
+  rebalancing_frequency: "weekly"
+  
+  # Turnover mensuel maximum (%)
+  max_monthly_turnover_percent: 50.0
+  
+  # Pause trades si volatilité spike (multiplier)
+  vol_spike_pause_multiplier: 2.0
+
+# ===========================================
+# CONTROLES DE LIQUIDITE
+# ===========================================
+
+liquidity_controls:
+  # Volume quotidien minimum (USD)
+  min_daily_volume_usd: 1000000
+  
+  # Prix minimum par action (USD)
+  min_stock_price_usd: 5.0
+  
+  # Spread bid-ask maximum (%)
+  max_bid_ask_spread_percent: 2.0
+  
+  # Participation maximale au volume quotidien (%)
+  max_volume_participation_percent: 5.0
+
+# ===========================================
+# STRESS TESTS ET SCENARIOS
+# ===========================================
+
+stress_scenarios:
+  # Scénario COVID-19 (2020)
+  covid_scenario:
+    volatility_multiplier: 1.5
+    correlation_increase: 0.2
+    max_drawdown_tolerance_percent: 25.0
+  
+  # Scénario inflation (2022)
+  inflation_scenario:
+    volatility_multiplier: 1.3
+    correlation_increase: 0.15
+    max_drawdown_tolerance_percent: 20.0
+  
+  # Scénario crise financière (2008)
+  financial_crisis_scenario:
+    volatility_multiplier: 2.0
+    correlation_increase: 0.3
+    max_drawdown_tolerance_percent: 30.0
+  
+  # Scénario crash AI/tech (black swan)
+  ai_crash_scenario:
+    volatility_multiplier: 2.5
+    correlation_increase: 0.4
+    max_drawdown_tolerance_percent: 25.0
+
+# ===========================================
+# CONTROLES OPERATIONNELS  
+# ===========================================
+
+operational_controls:
+  # Nombre maximum d'ordres par jour
+  max_orders_per_day: 50
+  
+  # Latence maximale pour les signaux (ms)
+  max_signal_latency_ms: 200
+  
+  # Uptime minimum requis pour les agents (%)
+  min_agent_uptime_percent: 99.5
+  
+  # Seuil d'alerte pour fill ratio (%)
+  min_fill_ratio_percent: 98.0
+
+# ===========================================
+# PARAMETRES DE MONITORING
+# ===========================================
+
+monitoring:
+  # Fréquence de calcul des métriques de risque
+  risk_calculation_frequency: "daily"
+  
+  # Seuils d'alerte
+  alerts:
+    drawdown_warning_percent: 10.0
+    var_breach_tolerance: 2  # Nombre de violations VaR consécutives
+    correlation_spike_threshold: 0.8
+    volatility_spike_multiplier: 2.0
+    regret_warning_percent: 5.0  # Alert si regret >5%
+  
+  # Rapports automatiques
+  reporting:
+    daily_risk_report: true
+    weekly_performance_review: true
+    monthly_stress_test: true
+
+# ===========================================
+# VALIDATION ET CONFORMITE
+# ===========================================
+
+compliance:
+  # Validation quotidienne des limites
+  daily_limit_check: true
+  
+  # Audit trail des décisions de trading
+  audit_trail_enabled: true
+  
+  # Backup des configurations de risque
+  risk_config_backup: true
+  
+  # Test de conformité avant go-live
+  pre_golive_compliance_check: true
+
+# ===========================================
+# PREFERENCES PERSONNELLES
+# ===========================================
+
+personal_preferences:
+  # Tolérance au risque (conservative/moderate/aggressive)
+  risk_tolerance: "moderate"
+  
+  # Secteurs de prédilection
+  preferred_sectors:
+    - "Information Technology"
+    - "Health Care"
+    - "Consumer Discretionary"
+  
+  # Horizon d'investissement (mois)
+  investment_horizon_months: 6
+  
+  # Biais stratégique préféré
+  preferred_strategy_bias: "momentum"  # or "value", "low-vol"
+  
+  # Contraintes additionnelles
+  additional_constraints:
+    - "No crypto exposure"
+    - "ESG screening preferred"
+    - "Avoid penny stocks"

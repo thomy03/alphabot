@@ -1,0 +1,168 @@
+# AlphaBot .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Poetry
+poetry.lock
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Testing
+.coverage
+.pytest_cache/
+.tox/
+.nox/
+htmlcov/
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Data et logs
+*.log
+logs/
+data/raw/
+data/processed/
+data/external/
+
+# Trading data sensible
+*.csv
+*.parquet
+*.h5
+*.hdf5
+backtests/
+live_data/
+
+# Configuration sensible
+.env.local
+.env.production
+config/production.yaml
+secrets.yaml
+
+# API Keys et credentials
+*.key
+*.pem
+*.p12
+api_keys.txt
+credentials.json
+.credentials/
+
+# Base de données
+*.db
+*.sqlite
+*.sqlite3
+duckdb/
+
+# Redis dumps
+dump.rdb
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Streamlit
+.streamlit/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# DVC (Data Version Control)
+.dvc/
+.dvcignore
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+
+# Model artifacts
+models/
+checkpoints/
+*.pkl
+*.joblib
+*.model
+
+# Documentation build
+docs/_build/
+docs/build/
+site/
+
+# Risk management data
+risk_reports/
+stress_test_results/
+performance_reports/
+
+# Trading execution logs
+execution_logs/
+order_history/
+fills/
+
+# Temporary analysis
+scratch/
+temp/
+analysis_temp/
+
+# Docker
+.dockerignore
+Dockerfile.dev
+
+# Cache directories
+.cache/
+.ruff_cache/
+
+# Local development
+local_config.yaml
+dev_settings.py
+playground.py
+test_script.py

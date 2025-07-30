@@ -16,7 +16,7 @@ sentence-transformers>=2.2.0
 tokenizers>=0.15.0
 
 # === Vector Database ===
-faiss-gpu>=1.7.4
+# faiss-gpu>=1.7.4  # Commenté car non disponible sur Colab
 faiss-cpu>=1.7.4  # Fallback
 
 # === Finance & Data ===

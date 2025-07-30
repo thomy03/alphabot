@@ -36,12 +36,17 @@ fi
 echo "Mise à jour de pip..."
 pip install --upgrade pip
 
-# Installer les dépendances depuis requirements_colab.txt
-if [ -f "requirements_colab.txt" ]; then
-    echo "Installation des dépendances depuis requirements_colab.txt..."
-    pip install -r requirements_colab.txt
-else
-    echo "⚠️  requirements_colab.txt non trouvé, installation manuelle..."
+    # Installer les dépendances depuis requirements_colab.txt
+    if [ -f "requirements_colab.txt" ]; then
+        echo "Installation des dépendances depuis requirements_colab.txt..."
+        if pip install -r requirements_colab.txt; then
+            echo "✅ Dépendances installées avec succès"
+        else
+            echo "⚠️ Échec d'installation via requirements, tentative faiss-cpu en fallback..."
+            pip install faiss-cpu>=1.7.4
+        fi
+    else
+        echo "⚠️  requirements_colab.txt non trouvé, installation manuelle..."
     
     # Installation des dépendances essentielles
     pip install tensorflow torch torchvision torchaudio

@@ -267,10 +267,12 @@ print(f"RAM utilisée: {memory_usage['percent_used']:.1f}%")
 ## 📚 Prochaines étapes
 
 ### Après l'entraînement
-1. **Télécharger les modèles** depuis Google Drive
-2. **Intégrer dans AlphaBot** local
-3. **Tester en paper trading**
-4. **Déployer en production**
+1. **Pousser les modifications** du notebook et des artefacts vers GitHub  
+```bash
+!git add .
+!git commit -m "Entraînement ML : mise à jour des artefacts"
+!git push origin main
+```  
 
 ### Améliorations possibles
 - **Data augmentation** pour plus de données

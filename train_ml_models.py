@@ -512,5 +512,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    success = asyncio.run(main())
-    sys.exit(0 if success else 1)
+    print("Ce script d'entraînement ML est réservé à Google Colab. Merci de lancer l'entraînement via ALPHABOT_ML_TRAINING_COLAB.ipynb et de pousser les artefacts via Git.")
+    sys.exit(0)

@@ -5,6 +5,8 @@
 [![CrewAI](https://img.shields.io/badge/CrewAI-multi--agent-green.svg)](https://crewai.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+**Documentation** : [Voir l'index complet de la documentation](docs/INDEX_DOCUMENTATION.md)
+
 Un système de trading algorithmique multi-agents utilisant CrewAI pour prendre des décisions d'investissement autonomes sur les marchés actions.
 
 ## 🎯 Objectifs
@@ -49,6 +51,9 @@ make test
 
 # 4. Démarrer le dashboard
 make streamlit
+
+# 5. Entraînement ML/DL via Google Colab  
+# Ouvrir `ALPHABOT_ML_TRAINING_COLAB.ipynb` sur Google Colab et suivre `docs/README_ENTRAINEMENT_COLAB.md`
 ```
 
 ## 📋 Commandes principales

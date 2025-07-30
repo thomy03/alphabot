@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(mkdir:*)",
+      "Bash(git add:*)",
+      "Bash(python3:*)",
+      "Bash(make:*)",
+      "Bash(pip3 install:*)",
+      "Bash(sudo apt:*)",
+      "Bash(sudo apt install:*)",
+      "Bash(ls:*)",
+      "Bash(python -m pytest tests/test_crew_integration.py -v --tb=short)",
+      "Bash(find:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)"
+    ],
+    "deny": []
+  }
+}

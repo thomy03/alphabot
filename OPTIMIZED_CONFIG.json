@@ -1,0 +1,15 @@
+{
+  "optimized_parameters": {
+    "ema_short": 8,
+    "ema_long": 25,
+    "rsi_period": 16,
+    "rsi_threshold": 72,
+    "score_threshold": 0.45
+  },
+  "performance": {
+    "annual_return": 0.9419314216031565,
+    "sharpe_ratio": 4.388687379721311,
+    "max_drawdown": -0.09997405449548398
+  },
+  "optimization_date": "2025-07-14T19:00:08.396678"
+}

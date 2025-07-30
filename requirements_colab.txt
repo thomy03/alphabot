@@ -47,7 +47,7 @@ google-api-python-client>=2.109.0
 
 # === PyTorch XLA (TPU Support) ===
 torch-xla>=2.1.0
-torch-xla-pytorch>=2.1.0
+# torch-xla-pytorch>=2.1.0  # Commenté: non disponible sur Colab, TPU support via torch-xla
 
 # === Mixed Precision Training ===
 nvidia-cublas-cu11>=12.1.0.26

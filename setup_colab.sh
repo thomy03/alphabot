@@ -42,8 +42,15 @@ pip install --upgrade pip
         if pip install -r requirements_colab.txt; then
             echo "✅ Dépendances installées avec succès"
         else
-            echo "⚠️ Échec d'installation via requirements, tentative faiss-cpu en fallback..."
+            echo "⚠️ Échec d'installation via requirements, installation fallback de toutes les dépendances..."
             pip install faiss-cpu>=1.7.4
+            pip install tensorflow>=2.15.0 torch>=2.1.0 torchvision>=0.16.0 torchaudio>=2.1.0
+            pip install transformers>=4.36.0 datasets>=2.15.0 accelerate>=0.25.0 bitsandbytes>=0.42.0
+            pip install sentence-transformers>=2.2.0 tokenizers>=0.15.0
+            pip install yfinance>=0.2.28 pandas>=2.1.0 numpy>=1.24.0 scipy>=1.11.0 scikit-learn>=1.3.0
+            pip install matplotlib>=3.8.0 seaborn>=0.13.0 plotly>=5.17.0
+            pip install tqdm>=4.66.0 joblib>=1.3.0 requests>=2.31.0 beautifulsoup4>=4.12.0 psutil>=5.9.0
+            pip install google-colab>=1.0.0 google-auth>=2.23.0 google-auth-oauthlib>=1.1.0 google-auth-httplib2>=0.1.1 google-api-python-client>=2.109.0
         fi
     else
         echo "⚠️  requirements_colab.txt non trouvé, installation manuelle..."

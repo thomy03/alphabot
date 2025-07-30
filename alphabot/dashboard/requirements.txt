@@ -1,0 +1,7 @@
+# AlphaBot Dashboard Requirements
+Flask==2.3.3
+plotly==5.17.0
+pandas==2.1.3
+numpy==1.24.3
+yfinance==0.2.18
+Werkzeug==2.3.7

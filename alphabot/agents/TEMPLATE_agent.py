@@ -1,6 +1,7 @@
 """
-Template Agent pour AlphaBot - Architecture CrewAI
+Template Agent pour AlphaBot - Architecture standalone
 Squelette de base pour tous les agents du système multi-agent
+Compatible avec CrewAI mais sans héritage direct pour éviter les conflits Pydantic
 """
 
 from typing import Dict, List, Any, Optional
@@ -9,11 +10,8 @@ from datetime import datetime
 import yaml
 from pathlib import Path
 
-from crewai import Agent, Task, Crew
-from crewai.tools import BaseTool
 
-
-class AlphaBotAgentTemplate(Agent):
+class AlphaBotAgentTemplate:
     """
     Template de base pour tous les agents AlphaBot
     Implémente les hooks standard et la configuration commune
@@ -23,22 +21,17 @@ class AlphaBotAgentTemplate(Agent):
         self,
         agent_name: str,
         description: str,
-        tools: List[BaseTool] = None,
         config_path: str = "risk_policy.yaml",
         **kwargs
     ):
         self.agent_name = agent_name
+        self.description = description
         self.config = self._load_config(config_path)
         self.logger = self._setup_logger()
+        self.start_time = None
         
-        super().__init__(
-            role=agent_name,
-            goal=description,
-            backstory=f"Expert {agent_name} agent for AlphaBot trading system",
-            tools=tools or [],
-            verbose=True,
-            **kwargs
-        )
+        # Initialisation des attributs
+        self._initialize_agent(**kwargs)
     
     def _load_config(self, config_path: str) -> Dict[str, Any]:
         """Charge la configuration depuis le fichier YAML"""
@@ -48,11 +41,17 @@ class AlphaBotAgentTemplate(Agent):
                 with open(config_file, 'r', encoding='utf-8') as f:
                     return yaml.safe_load(f)
             else:
-                self.logger.warning(f"Config file {config_path} not found, using defaults")
+                # Logger pas encore créé à ce stade
+                print(f"Warning: Config file {config_path} not found, using defaults")
                 return {}
         except Exception as e:
-            self.logger.error(f"Error loading config: {e}")
+            print(f"Error loading config: {e}")
             return {}
+    
+    def _initialize_agent(self, **kwargs):
+        """Initialise l'agent avec les paramètres spécifiques"""
+        # Hook d'initialisation pour les sous-classes
+        pass
     
     def _setup_logger(self) -> logging.Logger:
         """Configure le logger pour l'agent"""
@@ -157,64 +156,19 @@ class AlphaBotAgentTemplate(Agent):
             return False
 
 
-class AlphaBotTaskTemplate:
-    """Template de base pour les tâches AlphaBot"""
-    
-    @staticmethod
-    def create_task(
-        description: str,
-        agent: AlphaBotAgentTemplate,
-        expected_output: str = None,
-        tools: List[BaseTool] = None
-    ) -> Task:
+    def create_crewai_agent(self):
         """
-        Crée une tâche standardisée pour AlphaBot
-        
-        Args:
-            description: Description de la tâche
-            agent: Agent qui exécutera la tâche
-            expected_output: Format de sortie attendu
-            tools: Outils spécifiques à la tâche
-            
-        Returns:
-            Task configurée
+        Crée un agent CrewAI compatible à partir de cet agent
+        Utilise la composition plutôt que l'héritage
         """
-        return Task(
-            description=description,
-            agent=agent,
-            expected_output=expected_output or "JSON response with results",
-            tools=tools or []
-        )
-
-
-class AlphaBotCrewTemplate:
-    """Template de base pour les équipes d'agents AlphaBot"""
-    
-    def __init__(self, agents: List[AlphaBotAgentTemplate], tasks: List[Task]):
-        self.agents = agents
-        self.tasks = tasks
-        self.crew = Crew(
-            agents=agents,
-            tasks=tasks,
-            verbose=True
-        )
-        self.logger = logging.getLogger("alphabot.crew")
-    
-    def execute(self) -> Dict[str, Any]:
-        """Exécute l'équipe d'agents"""
         try:
-            self.logger.info("Starting crew execution")
-            result = self.crew.kickoff()
-            self.logger.info("Crew execution completed")
-            return {
-                "status": "success",
-                "result": result,
-                "timestamp": datetime.now().isoformat()
-            }
-        except Exception as e:
-            self.logger.error(f"Crew execution failed: {e}")
-            return {
-                "status": "error",
-                "message": str(e),
-                "timestamp": datetime.now().isoformat()
-            }
+            from crewai import Agent
+            return Agent(
+                role=self.agent_name,
+                goal=self.description,
+                backstory=f"Expert {self.agent_name} agent for AlphaBot trading system",
+                verbose=True
+            )
+        except ImportError:
+            self.logger.warning("CrewAI not available, agent running in standalone mode")
+            return None

@@ -468,6 +468,53 @@ class MLPatternDetector:
         
         return results
     
+    def detect_patterns(self, data: pd.DataFrame) -> List[PatternResult]:
+        """
+        Détecter les patterns pour un DataFrame (méthode synchrone pour Colab)
+        """
+        try:
+            if len(data) < 50:
+                return [PatternResult(
+                    pattern_type="insufficient_data",
+                    confidence=0.0,
+                    score=0.0,
+                    description="Insufficient data for pattern detection",
+                    reasoning=["Need at least 50 data points"],
+                    timeframe="daily",
+                    expected_move="SIDEWAYS"
+                )]
+            
+            # 1. Patterns techniques classiques
+            technical_patterns = self._detect_technical_patterns_sync(data)
+            
+            # 2. Prédictions LSTM
+            lstm_prediction = self._predict_lstm_sync(data)
+            
+            # 3. Prédictions CNN
+            cnn_prediction = self._predict_cnn_sync(data)
+            
+            # 4. Ensemble ML
+            ensemble_prediction = self._ensemble_predict_sync(data, lstm_prediction, cnn_prediction)
+            
+            # Fusionner tous les résultats
+            final_result = self._fuse_pattern_results(
+                technical_patterns, lstm_prediction, cnn_prediction, ensemble_prediction
+            )
+            
+            return [final_result]
+            
+        except Exception as e:
+            logger.error(f"Pattern detection failed: {e}")
+            return [PatternResult(
+                pattern_type="error",
+                confidence=0.0,
+                score=0.0,
+                description="Pattern detection error",
+                reasoning=[str(e)],
+                timeframe="daily",
+                expected_move="SIDEWAYS"
+            )]
+    
     async def detect_patterns(self, symbol: str, data: pd.DataFrame) -> PatternResult:
         """
         Détecter les patterns pour un symbole spécifique
@@ -936,3 +983,102 @@ class MLPatternDetector:
             'model_path': self.model_path,
             'technical_patterns': list(self.technical_patterns.keys())
         }
+    
+    def _detect_technical_patterns_sync(self, data: pd.DataFrame) -> Dict[str, Any]:
+        """Détecter les patterns techniques classiques (version synchrone)"""
+        patterns_found = {}
+        
+        for pattern_name, detection_func in self.technical_patterns.items():
+            try:
+                result = detection_func(data)
+                if result['detected']:
+                    patterns_found[pattern_name] = result
+            except Exception as e:
+                logger.warning(f"Technical pattern {pattern_name} detection failed: {e}")
+        
+        return patterns_found
+    
+    def _predict_lstm_sync(self, data: pd.DataFrame) -> Dict[str, Any]:
+        """Prédiction avec modèle LSTM (version synchrone)"""
+        if not TF_AVAILABLE or self.lstm_model is None:
+            return {'prediction': 'SIDEWAYS', 'confidence': 0.5}
+        
+        try:
+            # Préparer les données
+            features = self._prepare_lstm_features(data)
+            
+            if features is None:
+                return {'prediction': 'SIDEWAYS', 'confidence': 0.5}
+            
+            # Faire la prédiction
+            prediction = self.lstm_model.predict(features, verbose=0)
+            predicted_class = np.argmax(prediction[0])
+            confidence = np.max(prediction[0])
+            
+            class_map = {0: 'DOWN', 1: 'SIDEWAYS', 2: 'UP'}
+            
+            return {
+                'prediction': class_map[predicted_class],
+                'confidence': float(confidence)
+            }
+            
+        except Exception as e:
+            logger.error(f"LSTM prediction failed: {e}")
+            return {'prediction': 'SIDEWAYS', 'confidence': 0.5}
+    
+    def _predict_cnn_sync(self, data: pd.DataFrame) -> Dict[str, Any]:
+        """Prédiction avec modèle CNN (version synchrone)"""
+        if not TF_AVAILABLE or self.cnn_model is None:
+            return {'prediction': 'SIDEWAYS', 'confidence': 0.5}
+        
+        try:
+            # Préparer les données
+            features = self._prepare_cnn_features(data)
+            
+            if features is None:
+                return {'prediction': 'SIDEWAYS', 'confidence': 0.5}
+            
+            # Faire la prédiction
+            prediction = self.cnn_model.predict(features, verbose=0)
+            predicted_class = np.argmax(prediction[0])
+            confidence = np.max(prediction[0])
+            
+            class_map = {0: 'DOWN', 1: 'SIDEWAYS', 2: 'UP'}
+            
+            return {
+                'prediction': class_map[predicted_class],
+                'confidence': float(confidence)
+            }
+            
+        except Exception as e:
+            logger.error(f"CNN prediction failed: {e}")
+            return {'prediction': 'SIDEWAYS', 'confidence': 0.5}
+    
+    def _ensemble_predict_sync(self, data: pd.DataFrame, lstm_pred: Dict[str, Any], cnn_pred: Dict[str, Any]) -> Dict[str, Any]:
+        """Prédiction ensemble avec Random Forest et Gradient Boosting (version synchrone)"""
+        try:
+            # Préparer les features pour les modèles sklearn
+            features = self._prepare_sklearn_features(data, lstm_pred, cnn_pred)
+            
+            if features is None:
+                return {'prediction': 'SIDEWAYS', 'confidence': 0.5}
+            
+            # Faire les prédictions
+            rf_pred = self.rf_classifier.predict_proba([features])[0]
+            gb_pred = self.gb_classifier.predict_proba([features])[0]
+            
+            # Combiner les prédictions
+            ensemble_pred = (rf_pred + gb_pred) / 2
+            predicted_class = np.argmax(ensemble_pred)
+            confidence = np.max(ensemble_pred)
+            
+            class_map = {0: 'DOWN', 1: 'SIDEWAYS', 2: 'UP'}
+            
+            return {
+                'prediction': class_map[predicted_class],
+                'confidence': float(confidence)
+            }
+            
+        except Exception as e:
+            logger.error(f"Ensemble prediction failed: {e}")
+            return {'prediction': 'SIDEWAYS', 'confidence': 0.5}

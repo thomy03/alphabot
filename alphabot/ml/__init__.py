@@ -5,8 +5,8 @@ Package regroupant tous les composants ML/DL pour AlphaBot
 """
 
 from .pattern_detector import MLPatternDetector, PatternResult
-from .sentiment_analyzer import SentimentDLAnalyzer, SentimentResult
-from .rag_integrator import RAGIntegrator, RAGResult
+from .sentiment_analyzer import SentimentAnalyzer, SentimentResult
+from .rag_integrator import RAGAnalyzer, RAGResult
 
 __version__ = "1.0.0"
 __author__ = "AlphaBot Team"
@@ -15,9 +15,9 @@ __author__ = "AlphaBot Team"
 __all__ = [
     "MLPatternDetector",
     "PatternResult", 
-    "SentimentDLAnalyzer",
+    "SentimentAnalyzer",
     "SentimentResult",
-    "RAGIntegrator",
+    "RAGAnalyzer",
     "RAGResult"
 ]
 

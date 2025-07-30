@@ -1,5 +1,3 @@
-# AlphaBot .gitignore
-
 # Python
 __pycache__/
 *.py[cod]
@@ -18,20 +16,17 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
 
-# Poetry
-poetry.lock
-
 # Virtual environments
-.env
-.venv
 env/
 venv/
+.venv/
 ENV/
 env.bak/
 venv.bak/
@@ -43,71 +38,6 @@ venv.bak/
 *.swo
 *~
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Testing
-.coverage
-.pytest_cache/
-.tox/
-.nox/
-htmlcov/
-.coverage.*
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-
-# Type checking
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Data et logs
-*.log
-logs/
-data/raw/
-data/processed/
-data/external/
-
-# Trading data sensible
-*.csv
-*.parquet
-*.h5
-*.hdf5
-backtests/
-live_data/
-
-# Configuration sensible
-.env.local
-.env.production
-config/production.yaml
-secrets.yaml
-
-# API Keys et credentials
-*.key
-*.pem
-*.p12
-api_keys.txt
-credentials.json
-.credentials/
-
-# Base de données
-*.db
-*.sqlite
-*.sqlite3
-duckdb/
-
-# Redis dumps
-dump.rdb
-
-# MLflow
-mlruns/
-mlflow.db
-
-# Streamlit
-.streamlit/
-
 # OS
 .DS_Store
 .DS_Store?
@@ -117,52 +47,182 @@ mlflow.db
 ehthumbs.db
 Thumbs.db
 
-# DVC (Data Version Control)
-.dvc/
-.dvcignore
+# Logs
+*.log
+logs/
+*.logs
 
-# Backup files
-*.bak
-*.backup
-*.tmp
-
-# Model artifacts
+# Data and models
+data/
+*.h5
+*.pkl
+*.pth
+*.pt
+*.onnx
+*.pb
 models/
 checkpoints/
-*.pkl
-*.joblib
-*.model
+saved_models/
+model_weights/
+training_data/
+paper_trading_data/
+demo_paper_trading/
+optimization_results/
+backtests/
+*.csv
+*.parquet
+*.feather
+*.hdf5
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+.cache/
+*.bak
+*.backup
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
 
 # Documentation build
 docs/_build/
 docs/build/
-site/
 
-# Risk management data
-risk_reports/
-stress_test_results/
-performance_reports/
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# Trading execution logs
-execution_logs/
-order_history/
-fills/
+# pyenv
+.python-version
 
-# Temporary analysis
-scratch/
-temp/
-analysis_temp/
+# celery
+celerybeat-schedule
+celerybeat.pid
 
-# Docker
-.dockerignore
-Dockerfile.dev
+# SageMath parsed files
+*.sage.py
 
-# Cache directories
-.cache/
-.ruff_cache/
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
 
 # Local development
-local_config.yaml
-dev_settings.py
-playground.py
-test_script.py
+.local/
+.config/
+
+# Google Colab specific
+/sample_data/
+/.local/
+/.config/
+/root/.cache/
+
+# AlphaBot specific
+archive/
+old_scripts/
+SuperClaude/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.pdf
+
+# Large files (avoid committing)
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Credentials and secrets
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# Node.js (if any frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Mac
+.AppleDouble
+.LSOverride
+
+# Windows
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Linux
+*~
+
+# Temporary directories
+tmp/
+temp/
+.tmp/
+.temp/
+
+# Backup files
+*.backup
+*.bak
+*.swp
+*.swo
+
+# Compiled binaries
+*.exe
+*.dll
+*.dylib
+
+# Profiling
+*.prof
+
+# Memory dumps
+*.dmp
+*.core
+
+# Lock files
+package-lock.json
+yarn.lock
+Pipfile.lock
+
+# Configuration files with sensitive data
+config.local.json
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# AlphaBot ML Training specific
+training_logs/
+model_exports/
+data_cache/
+*.bin
+*.bin.*

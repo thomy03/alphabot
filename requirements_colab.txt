@@ -1,0 +1,114 @@
+# Requirements pour Google Colab - AlphaBot ML/DL Training
+# Version optimisée pour GPU/TPU acceleration
+
+# === Core Dependencies ===
+tensorflow>=2.15.0
+torch>=2.1.0
+torchvision>=0.16.0
+torchaudio>=2.1.0
+
+# === Transformers & NLP ===
+transformers>=4.36.0
+datasets>=2.15.0
+accelerate>=0.25.0
+bitsandbytes>=0.42.0
+sentence-transformers>=2.2.0
+tokenizers>=0.15.0
+
+# === Vector Database ===
+faiss-gpu>=1.7.4
+faiss-cpu>=1.7.4  # Fallback
+
+# === Finance & Data ===
+yfinance>=0.2.28
+pandas>=2.1.0
+numpy>=1.24.0
+scipy>=1.11.0
+scikit-learn>=1.3.0
+
+# === Visualization ===
+matplotlib>=3.8.0
+seaborn>=0.13.0
+plotly>=5.17.0
+
+# === Utilities ===
+tqdm>=4.66.0
+joblib>=1.3.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+psutil>=5.9.0
+
+# === Google Colab Specific ===
+google-colab>=1.0.0
+google-auth>=2.23.0
+google-auth-oauthlib>=1.1.0
+google-auth-httplib2>=0.1.1
+google-api-python-client>=2.109.0
+
+# === PyTorch XLA (TPU Support) ===
+torch-xla>=2.1.0
+torch-xla-pytorch>=2.1.0
+
+# === Mixed Precision Training ===
+nvidia-cublas-cu11>=12.1.0.26
+nvidia-cudnn-cu11>=8.9.0.0
+nvidia-cufft-cu11>=11.0.0.0
+nvidia-curand-cu11>=10.3.0.0
+nvidia-cusolver-cu11>=11.4.0.0
+nvidia-cusparse-cu11>=11.7.0.0
+nvidia-cudart-cu11>=12.1.0.0
+nvidia-cnvrtc-cu11>=12.1.0.0
+
+# === Memory Management ===
+triton>=2.1.0
+flash-attn>=2.4.0
+
+# === Optimization ===
+optuna>=3.4.0
+ray[tune]>=2.8.0
+hyperopt>=0.2.7
+
+# === Logging & Monitoring ===
+wandb>=0.16.0
+tensorboard>=2.15.0
+mlflow>=2.8.0
+
+# === Data Processing ===
+dask>=2023.11.0
+polars>=0.20.0
+pyarrow>=14.0.0
+
+# === Configuration ===
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+click>=8.1.0
+rich>=13.7.0
+
+# === Testing ===
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.0
+
+# === Documentation ===
+sphinx>=7.2.0
+sphinx-rtd-theme>=1.3.0
+mkdocs>=1.5.0
+mkdocs-material>=9.4.0
+
+# === Development ===
+black>=23.11.0
+flake8>=6.1.0
+isort>=5.12.0
+mypy>=1.7.0
+
+# === Optional (for enhanced features) ===
+# Uncomment if needed
+# nltk>=3.8.0
+# spacy>=3.7.0
+# gensim>=4.3.0
+# networkx>=3.2.0
+# plotly>=5.17.0
+# dash>=2.14.0
+# streamlit>=1.28.0
+# fastapi>=0.104.0
+# uvicorn>=0.24.0

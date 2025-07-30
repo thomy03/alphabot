@@ -126,6 +126,14 @@ alphabot/
 - Suivre `PLAN_AMELIORATION_EXPERT_V2.md` pour les améliorations planifiées
 - Implémenter les fonctionnalités selon `planning.yml`
 
+### Workflow d'Entraînement ML/DL
+1. **Ouvrir Google Colab** et charger `ALPHABOT_ML_TRAINING_COLAB.ipynb`
+2. **Configurer GPU/TPU** et suivre `docs/README_ENTRAINEMENT_COLAB.md`
+3. **Lancer l'entraînement** des modèles (Pattern Detector, Sentiment Analyzer, RAG Integrator)
+4. **Pousser les artefacts** vers GitHub après l'entraînement (commandes Git dans les README)
+5. **Tester localement** avec `test_hybrid_orchestrator.py` pour valider l'intégration
+6. **Déployer en production** après validation (backtesting, paper trading)
+
 ---
 
 *Dernière mise à jour: 30 juillet 2025*

@@ -49,7 +49,7 @@ class SentimentResult:
     momentum: str  # IMPROVING, DECLINING, STABLE
 
 
-class SentimentDLAnalyzer:
+class SentimentAnalyzer:
     """
     Analyseur de sentiment Deep Learning
     

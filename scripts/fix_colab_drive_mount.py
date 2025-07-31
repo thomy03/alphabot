@@ -1,0 +1,81 @@
+import json
+
+# Charger le notebook
+with open('ALPHABOT_ML_TRAINING_COLAB.ipynb', 'r', encoding='utf-8') as f:
+    nb = json.load(f)
+
+# Corriger la cellule 2 (montage Google Drive) pour gérer le cas "Mountpoint must not already contain files"
+for cell in nb['cells']:
+    if cell['cell_type'] == 'code' and 'CELLULE 2' in ''.join(cell['source']) and 'drive.mount' in ''.join(cell['source']):
+        source = []
+        source.append("print(\"🔧 Configuration Google Drive...\")\n")
+        source.append("from google.colab import drive\n")
+        source.append("import os\n")
+        source.append("\n")
+        source.append("# Gérer proprement le montage de Google Drive\n")
+        source.append("MOUNT_POINT = '/content/drive'\n")
+        source.append("try:\n")
+        source.append("    if os.path.ismount(MOUNT_POINT):\n")
+        source.append("        print(\"ℹ️ Drive déjà monté. Remontage propre...\")\n")
+        source.append("        drive.flush_and_unmount()\n")
+        source.append("        # Nettoyer le point de montage si des fichiers y restent\n")
+        source.append("        try:\n")
+        source.append("            for entry in os.listdir(MOUNT_POINT):\n")
+        source.append("                path = os.path.join(MOUNT_POINT, entry)\n")
+        source.append("                if os.path.isfile(path):\n")
+        source.append("                    os.remove(path)\n")
+        source.append("        except Exception as e:\n")
+        source.append("            print(f\"⚠️ Nettoyage non critique: {e}\")\n")
+        source.append("    else:\n")
+        source.append("        # Si le répertoire existe et contient déjà des fichiers (en local), ne pas remonter directement\n")
+        source.append("        if os.path.isdir(MOUNT_POINT) and os.listdir(MOUNT_POINT):\n")
+        source.append("            print(\"ℹ️ Le dossier /content/drive contient déjà des fichiers locaux. Tentative de démontage préalable si résidu de montage.\")\n")
+        source.append("            try:\n")
+        source.append("                drive.flush_and_unmount()\n")
+        source.append("            except Exception as e:\n")
+        source.append("                print(f\"⚠️ Démontage non nécessaire: {e}\")\n")
+        source.append("\n")
+        source.append("    # Monter Google Drive en lecture/écriture\n")
+        source.append("    drive.mount(MOUNT_POINT, force_remount=True)\n")
+        source.append("    print(\"✅ Google Drive monté avec succès\")\n")
+        source.append("except Exception as e:\n")
+        source.append("    msg = str(e)\n")
+        source.append("    print(f\"❌ Erreur de montage: {msg}\")\n")
+        source.append("    # Gestion spécifique du message d'erreur rencontré\n")
+        source.append("    if 'Mountpoint must not already contain files' in msg:\n")
+        source.append("        print(\"🔧 Correction automatique: démontage + nettoyage + remontage\")\n")
+        source.append("        try:\n")
+        source.append("            drive.flush_and_unmount()\n")
+        source.append("        except Exception as e2:\n")
+        source.append("            print(f\"⚠️ flush_and_unmount a échoué/non requis: {e2}\")\n")
+        source.append("        try:\n")
+        source.append("            # Créer le dossier s'il n'existe pas\n")
+        source.append("            os.makedirs(MOUNT_POINT, exist_ok=True)\n")
+        source.append("            # Supprimer tout fichier résiduel local dans le dossier de montage\n")
+        source.append("            for entry in os.listdir(MOUNT_POINT):\n")
+        source.append("                path = os.path.join(MOUNT_POINT, entry)\n")
+        source.append("                if os.path.isfile(path):\n")
+        source.append("                    os.remove(path)\n")
+        source.append("        except Exception as e3:\n")
+        source.append("            print(f\"⚠️ Nettoyage local non critique: {e3}\")\n")
+        source.append("        # Tenter un remontage forcé\n")
+        source.append("        drive.mount(MOUNT_POINT, force_remount=True)\n")
+        source.append("        print(\"✅ Google Drive remonté avec succès après correction\")\n")
+        source.append("    else:\n")
+        source.append("        raise\n")
+        source.append("\n")
+        source.append("# Définir le chemin de base du projet sur Drive\n")
+        source.append("base_path = '/content/drive/MyDrive/AlphaBot_ML_Training'\n")
+        source.append("os.makedirs(base_path, exist_ok=True)\n")
+        source.append("os.makedirs(f\"{base_path}/data\", exist_ok=True)\n")
+        source.append("os.makedirs(f\"{base_path}/models\", exist_ok=True)\n")
+        source.append("os.makedirs(f\"{base_path}/checkpoints\", exist_ok=True)\n")
+        source.append("print(f\"📁 Répertoires prêts sous: {base_path}\")\n")
+        cell['source'] = source
+        break
+
+# Sauvegarder le notebook corrigé
+with open('ALPHABOT_ML_TRAINING_COLAB.ipynb', 'w', encoding='utf-8') as f:
+    json.dump(nb, f, indent=1, ensure_ascii=False)
+
+print("Notebook corrigé avec succès - montage Google Drive résilient en cellule 2.")

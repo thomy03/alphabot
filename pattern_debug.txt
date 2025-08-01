@@ -1,0 +1,135 @@
+
+==== DEBUG RUN 2025-08-01T12:05:16.606215 ====
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+
+==== DEBUG RUN 2025-08-01T12:26:14.147877 ====
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+
+==== DEBUG RUN 2025-08-01T12:35:58.721233 ====
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+cols: close=None, high=None, low=None, vol=None
+total_windows=0 by_symbol_total=0
+
+==== DEBUG RUN 2025-08-01T13:01:18.691257 ====
+cols: close=None, high=None, low=None, vol=None
+symbol=AAPL skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=GOOGL skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=MSFT skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=TSLA skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=AMZN skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=NVDA skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=META skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=NFLX skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=IBM skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=ORCL skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=INTC skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=AMD skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=QCOM skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=CRM skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=SAP skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=CSCO skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=JPM skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=BAC skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=V skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=MA skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=DIS skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=KO skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=PEP skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=NKE skipped: missing cols
+cols: close=None, high=None, low=None, vol=None
+symbol=XOM skipped: missing cols
+total_windows=0 total_by_symbol=0

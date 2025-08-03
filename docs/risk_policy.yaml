@@ -231,6 +231,41 @@ monitoring:
     monthly_stress_test: true
 
 # ===========================================
+# ROUTING ML ET KILL-SWITCH (V2)
+# ===========================================
+
+ml_routing:
+  schema_version: "2.0"
+  # Seuils globaux de décision pour l'émission de trade par les modèles ML
+  min_confidence_prob: 0.55
+  min_expected_edge: 0.0
+
+  # Seuils par régime (utilisés par l’orchestrateur/ModelSelector)
+  per_regime_thresholds:
+    bull:
+      min_confidence_prob: 0.55
+      min_expected_edge: 0.00
+    bear:
+      min_confidence_prob: 0.60
+      min_expected_edge: 0.05
+    sideways:
+      min_confidence_prob: 0.58
+      min_expected_edge: 0.02
+
+  # Kill-switch basé sur la performance live (rolling)
+  kill_switch:
+    enabled: true
+    rolling_trades_window: 50
+    min_hit_rate: 0.50       # bascule en mode baseline si en dessous
+    min_pnl_ratio: -0.02     # PnL agrégé toléré sur la fenêtre (en % capital)
+    action_on_trigger: "fallback_to_baseline"  # ou "disable_ml"
+
+  # Fallback
+  fallback:
+    baseline_model: "baseline_robuste"
+    enable_on_low_confidence: true
+
+# ===========================================
 # VALIDATION ET CONFORMITE
 # ===========================================
 

@@ -45,6 +45,74 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+# === V2 Model Selection (routing par régime) ===
+from dataclasses import dataclass
+from typing import Any, Dict, Optional, Tuple
+import json
+import os
+
+@dataclass
+class RegimeThresholdsV2:
+    min_confidence_prob: float
+    min_expected_edge: float
+
+class ModelSelectorV2:
+    """
+    Sélecteur de modèle 'champion' par régime.
+    Lit champions.json et docs/OPTIMIZED_CONFIG.json pour appliquer des seuils.
+    Baseline fallback si confiance insuffisante.
+    """
+    def __init__(self,
+                 champions_path: str = "champions.json",
+                 optimized_config_path: str = "docs/OPTIMIZED_CONFIG.json"):
+        self.champions_path = champions_path
+        self.optimized_config_path = optimized_config_path
+        self._champions: Dict[str, Any] = {}
+        self._global_thresholds = RegimeThresholdsV2(0.55, 0.0)
+        self._per_regime_thresholds: Dict[str, RegimeThresholdsV2] = {
+            "bull": RegimeThresholdsV2(0.55, 0.00),
+            "bear": RegimeThresholdsV2(0.60, 0.05),
+            "sideways": RegimeThresholdsV2(0.58, 0.02),
+        }
+        self._fallback_baseline: Optional[str] = None
+        self._load()
+
+    def _safe_load_json(self, path: str) -> Optional[Dict[str, Any]]:
+        try:
+            if os.path.exists(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+        except Exception as e:
+            logger.warning(f"ModelSelectorV2: erreur chargement {path}: {e}")
+        return None
+
+    def _load(self) -> None:
+        champions = self._safe_load_json(self.champions_path)
+        if champions:
+            self._champions = champions
+            baseline = champions.get("baseline", {})
+            self._fallback_baseline = baseline.get("model_name")
+
+        ocfg = self._safe_load_json(self.optimized_config_path)
+        if ocfg:
+            ms = ocfg.get("model_selection", {})
+            try:
+                self._global_thresholds = RegimeThresholdsV2(
+                    float(ms.get("min_confidence_prob", 0.55)),
+                    float(ms.get("min_expected_edge", 0.0)),
+                )
+            except Exception:
+                pass
+
+    def get_thresholds(self, regime: str) -> RegimeThresholdsV2:
+        return self._per_regime_thresholds.get(regime, self._global_thresholds)
+
+    def get_model_info(self, regime: str) -> Tuple[Optional[Dict[str, Any]], RegimeThresholdsV2]:
+        return self._champions.get(regime), self.get_thresholds(regime)
+
+    def get_baseline(self) -> Optional[str]:
+        return self._fallback_baseline
+
 
 class HybridWorkflowType(Enum):
     """Types de workflows hybrides"""
@@ -90,6 +158,11 @@ class HybridOrchestrator:
     
     def __init__(self, enable_ml: bool = True, ml_confidence_threshold: float = 0.7):
         self.settings = get_settings()
+        # Sélecteur V2 pour routing par régime
+        self.model_selector_v2 = ModelSelectorV2(
+            champions_path="champions.json",
+            optimized_config_path="docs/OPTIMIZED_CONFIG.json"
+        )
         self.signal_hub = get_signal_hub()
         
         # Core System - toujours actif

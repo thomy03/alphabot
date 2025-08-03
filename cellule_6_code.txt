@@ -1,0 +1,152 @@
+## 6) Entraînement Sentiment Analyzer (FinBERT) - Torch import-safe (évite import torch avant patch)
+
+import os, sys, subprocess, importlib, json
+from datetime import datetime
+
+# 0) base_path + progress
+if 'base_path' not in globals():
+    base_path = '/content/drive/MyDrive/AlphaBot_ML_Training'
+    os.makedirs(base_path, exist_ok=True)
+    print(f"📁 base_path défini: {base_path}")
+
+if 'update_progress' not in globals():
+    def update_progress(cell_name):
+        progress_file = f'{base_path}/progress_tracker.json'
+        try:
+            with open(progress_file, 'r') as f:
+                progress = json.load(f)
+        except:
+            progress = {}
+        progress[cell_name] = True
+        progress['last_cell_executed'] = cell_name
+        progress['last_update'] = datetime.now().isoformat()
+        with open(progress_file, 'w') as f:
+            json.dump(progress, f, indent=2)
+        print(f'✅ Progression mise à jour: {cell_name}')
+
+# 1) IMPORTANT: Ne pas importer torch ici. Le bug docstring survient souvent si torch est importé
+#    avant que l'environnement soit propre. On évite torch jusqu'au dernier moment.
+
+# 2) Purge modules HF (pas torch)
+print("🧹 Purge modules transformers/accelerate/hub/datasets/safetensors (sans import torch)")
+for m in list(sys.modules):
+    if m.startswith(("transformers", "accelerate", "huggingface_hub", "datasets", "safetensors")):
+        sys.modules.pop(m, None)
+importlib.invalidate_caches()
+
+# 3) Retirer accelerate pour contourner clear_device_cache
+print("🧯 Désinstallation accelerate")
+subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "accelerate"], check=False)
+
+# 4) Installer HF sans accelerate
+print("🔧 Installation HF (sans accelerate)")
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--upgrade",
+                "transformers==4.41.2",
+                "datasets==2.18.0",
+                "huggingface-hub==0.24.6",
+                "safetensors>=0.4.3"], check=False)
+
+# 5) Forcer CPU logique
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+# Désactiver entièrement accelerate pour transformers
+os.environ["TRANSFORMERS_NO_ACCELERATE"] = "1"
+
+importlib.invalidate_caches()
+
+# 6) Import minimal: n'importer torch qu'ici, et séparément pour identifier précisément le crash
+print("🔎 Vérification progressive des versions (sans importer torch dans le même import)...")
+import transformers; print("Transformers:", transformers.__version__)
+import datasets; print("Datasets    :", datasets.__version__)
+import huggingface_hub; print("HF Hub      :", huggingface_hub.__version__)
+import safetensors; print("Safetensors :", safetensors.__version__)
+
+# Import torch à la fin (après avoir figé HF et env). Si ça casse encore, Colab runtime doit être redémarré.
+try:
+    import torch
+    print("Torch       :", torch.__version__)
+except Exception as e:
+    print("❌ Import torch a échoué: ", str(e))
+    print("➡️ Faites Runtime > Restart runtime, puis exécutez UNIQUEMENT cette cellule (l'ordre d'import est crucial).")
+    raise
+
+# 7) Entraînement FinBERT (Trainer sans accelerate ou fallback manuel)
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments
+try:
+    from transformers import Trainer
+except Exception as e:
+    print("⚠️ Trainer import a échoué; fallback manuel:", str(e))
+    Trainer = None
+
+from torch.utils.data import Dataset
+
+class SentimentDataset(Dataset):
+    def __init__(self, texts, labels, tokenizer, max_length=128):
+        self.texts = texts
+        self.labels = labels
+        self.tokenizer = tokenizer
+        self.max_length = max_length
+
+    def __len__(self):
+        return len(self.texts)
+
+    def __getitem__(self, idx):
+        t = str(self.texts[idx])
+        l = self.labels[idx]
+        enc = self.tokenizer(
+            t,
+            truncation=True,
+            padding='max_length',
+            max_length=self.max_length,
+            return_tensors='pt'
+        )
+        return {
+            'input_ids': enc['input_ids'].squeeze(0),
+            'attention_mask': enc['attention_mask'].squeeze(0),
+            'labels': torch.tensor(l, dtype=torch.long)
+        }
+
+texts = [
+    'Apple reports record quarterly earnings',
+    'Google stock drops on regulatory concerns',
+    'Tesla announces new battery technology',
+    'Microsoft cloud growth exceeds expectations',
+    'Amazon faces antitrust investigation'
+]
+labels = [2, 0, 2, 2, 0]
+
+model_name = 'yiyanghkust/finbert-tone'
+tok = AutoTokenizer.from_pretrained(model_name)
+mdl = AutoModelForSequenceClassification.from_pretrained(model_name)
+ds = SentimentDataset(texts, labels, tok)
+
+if Trainer is not None:
+    args = TrainingArguments(
+        output_dir=f'{base_path}/checkpoints/sentiment',
+        num_train_epochs=1,
+        per_device_train_batch_size=4,
+        logging_dir=f'{base_path}/logs/sentiment',
+        logging_steps=1,
+        save_strategy='no',
+        evaluation_strategy='no'
+    )
+    trainer = Trainer(model=mdl, args=args, train_dataset=ds, tokenizer=tok)
+    print('🚀 Entraînement FinBERT via Trainer (sans accelerate)...')
+    trainer.train()
+else:
+    print('🚀 Entraînement manuel (fallback) — 1 epoch CPU, batch complet')
+    mdl.train()
+    optimizer = torch.optim.AdamW(mdl.parameters(), lr=5e-5)
+    all_inputs = tok(texts, truncation=True, padding='max_length', max_length=128, return_tensors='pt')
+    labels_t = torch.tensor(labels, dtype=torch.long)
+    optimizer.zero_grad()
+    out = mdl(input_ids=all_inputs['input_ids'], attention_mask=all_inputs['attention_mask'], labels=labels_t)
+    loss = out.loss
+    print('loss:', float(loss.item()))
+    loss.backward()
+    optimizer.step()
+
+os.makedirs(f'{base_path}/models', exist_ok=True)
+mdl.save_pretrained(f'{base_path}/models/finbert_sentiment')
+tok.save_pretrained(f'{base_path}/models/finbert_sentiment')
+print('✅ FinBERT sauvegardé (HF sans accelerate, import torch en dernier)')
+update_progress('cell_6_rag_training')

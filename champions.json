@@ -1,0 +1,30 @@
+{
+  "bull": {
+    "model_name": "lstm_conv",
+    "path": "models/lstm_conv_bull.onnx",
+    "thresholds": {
+      "min_confidence_prob": 0.55,
+      "min_expected_edge": 0.0
+    }
+  },
+  "bear": {
+    "model_name": "gru",
+    "path": "models/gru_bear.onnx",
+    "thresholds": {
+      "min_confidence_prob": 0.6,
+      "min_expected_edge": 0.05
+    }
+  },
+  "sideways": {
+    "model_name": "gbm_light",
+    "path": "models/gbm_sideways.pkl",
+    "thresholds": {
+      "min_confidence_prob": 0.58,
+      "min_expected_edge": 0.02
+    }
+  },
+  "baseline": {
+    "model_name": "baseline_robuste",
+    "path": "models/baseline.pkl"
+  }
+}

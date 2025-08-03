@@ -1,10 +1,29 @@
 {
+  "schema_version": "2.0",
   "optimized_parameters": {
     "ema_short": 8,
     "ema_long": 25,
     "rsi_period": 16,
     "rsi_threshold": 72,
     "score_threshold": 0.45
+  },
+  "model_selection": {
+    "champions_path": "champions.json",
+    "min_confidence_prob": 0.55,
+    "min_expected_edge": 0.0,
+    "gating_weights": {
+      "bull": { "sentiment": 0.4, "pattern": 0.6 },
+      "bear": { "sentiment": 0.5, "pattern": 0.5 },
+      "sideways": { "sentiment": 0.6, "pattern": 0.4 }
+    }
+  },
+  "inference_optimization": {
+    "onnx_export": true,
+    "batch_inference": true,
+    "feature_cache": {
+      "enabled": true,
+      "ttl_days": 1
+    }
   },
   "performance": {
     "annual_return": 0.9419314216031565,

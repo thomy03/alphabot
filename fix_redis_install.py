@@ -34,8 +34,8 @@ def fix_redis_install():
     
     # Nouvelle cellule complète avec installation de redis en premier
     new_cell_source = [
-        "# Installation des dépendances requises (redis pour signal_hub)\n",
-        "!pip install -q \"redis>=4.5\" \"pydantic>=1.10,<2.0\" \"pyyaml\" \"numpy>=1.24,<1.27\" \"pandas\" \"matplotlib\" \"scikit-learn\" \"torch\" \"transformers>=4.41,<4.47\" \"huggingface-hub>=0.25,<0.26\" \"safetensors>=0.4.3\"\n",
+        "# Installation des dépendances requises (redis pour signal_hub + pydantic_settings)\n",
+        "!pip install -q \"redis>=4.5\" \"pydantic-settings>=2.0\" \"pydantic>=2.0\" \"pyyaml\" \"numpy>=1.24,<1.27\" \"pandas\" \"matplotlib\" \"scikit-learn\" \"torch\" \"transformers>=4.41,<4.47\" \"huggingface-hub>=0.28\" \"safetensors>=0.4.3\"\n",
         "\n",
         "# Clonage du repo GitHub\n",
         "!git clone https://github.com/thomy03/alphabot.git /content/alphabot_repo || echo 'Repo déjà cloné'\n",
